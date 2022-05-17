@@ -519,10 +519,10 @@ if cve_list:
 # telegram alert
 if cve_list:
     if len(cve_list) == 1:
-        message = f'parsing_pdf.py\nДобавлена информация о новой уязвимости {cve_list[0]}'
+        message = f'*NKCKI*\nДобавлена информация о новой уязвимости {cve_list[0]}'
         telegram_alert(message)
     else:
-        message = f'parsing_pdf.py\nДобавлена информация о новых уязвимостях\n {", ".join(cve_list)}'
+        message = f'*NKCKI*\nДобавлена информация о новых уязвимостях\n {", ".join(cve_list)}'
         telegram_alert(message)
 
 

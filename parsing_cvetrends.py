@@ -555,9 +555,9 @@ if email_list:
 
 if email_list:
     if len(email_list) == 1:
-        message = f'parsing_cvetrends.py\nДобавлена информация о новой уязвимости {email_list[0]}'
+        message = f'*CVETRENDS*\nДобавлена информация о новой уязвимости {email_list[0]}'
         telegram_alert(message)
     else:
-        message = f'parsing_cvetrends.py\nДобавлена информация о новых уязвимостях\n {", ".join(email_list)}'
+        message = f'*CVETRENDS*\nДобавлена информация о новых уязвимостях\n {", ".join(email_list)}'
         telegram_alert(message)
 

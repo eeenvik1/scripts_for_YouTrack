@@ -656,7 +656,7 @@ current_time = str(time.time() - start_time)
 super_time = convert_to_preferred_format(int(current_time.split(".")[0]))
 start_date = time_start.split(" ")[0]
 start_time = time_start.split(" ")[1]
-message = f'changing_all_issues.py\nПрограмма начала работу {start_date} в {start_time} и отработала за {super_time}'
+message = f'*CHANGING*\nПрограмма начала работу {start_date} в {start_time} и отработала за {super_time}'
 # telegram alert
 telegram_alert(message)
 # email_alert(time_start, time_stop)
