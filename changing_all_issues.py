@@ -595,6 +595,16 @@ def telegram_alert(message):
     # Djenya Alert
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_J}&text={message}")
 
+
+# convert sec to normak time like 01:35:52------------------------------------------------------------------------------
+def convert_to_preferred_format(sec):
+    sec = sec % (24 * 3600)
+    hour = sec // 3600
+    sec %= 3600
+    min = sec // 60
+    sec %= 60
+    return "%02d:%02d:%02d" % (hour, min, sec)
+
 # ----------------------------------------------MAIN--------------------------------------------------------------------
 now = datetime.datetime.now()
 time_start = now.strftime("%d-%m-%Y %H:%M")
@@ -638,7 +648,10 @@ for i, item in enumerate(cve_list):
 
 time_stop = "за %s секунд" % (time.time() - start_time)
 current_time = str(time.time() - start_time)
-message = f'changing_all_issues.py\nПрограмма начала работу {time_start} и отработала за {current_time.split(".")[0]} секунд'
+super_time = convert_to_preferred_format(int(current_time.split(".")[0]))
+start_date = time_start.split(" ")[0]
+start_time = time_start.split(" ")[1]
+message = f'changing_all_issues.py\nПрограмма начала работу {start_date} в {start_time} и отработала за {super_time}'
 # telegram alert
 telegram_alert(message)
 # email_alert(time_start, time_stop)
