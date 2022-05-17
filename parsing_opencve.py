@@ -11,6 +11,8 @@ import smtplib
 from email.message import EmailMessage
 from dotenv import dotenv_values
 import os
+import random
+from stickers import stickers
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -441,10 +443,13 @@ def email_alert(cve_list):
 
 #alert on telegram bot--------------------------------------------------------------------------------------------------
 def telegram_alert(message):
+    sticker = random.choice(stickers)
     # Ruslan Alert
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_R}&text={message}")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_R}&sticker={sticker}")
     # Djenya Alert
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_J}&text={message}")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
 
 # -----------------------------------------------MAIN-----------------------------------------------------------------
 headers = {
