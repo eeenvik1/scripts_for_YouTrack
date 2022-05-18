@@ -591,19 +591,21 @@ def email_alert(time_start, time_stop):
     print('Email sent {}'.format(msg['Subject']))
 
 
-#alert on telegram bot--------------------------------------------------------------------------------------------------
+#alert on telegram bot-------------------------Использовать на свой страх и риск----------------------------------------
 def telegram_alert(message):
     sticker = random.choice(stickers)
     # Ruslan Alert
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_R}&text={message}&parse_mode=markdown")
+    requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_R}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_R}&sticker={sticker}")
     # Djenya Alert
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
+    requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
     # Lexa Alert
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
-
+    requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_L}&sticker={sticker}")
 
 # convert sec to normak time like 01:35:52------------------------------------------------------------------------------
 def convert_to_preferred_format(sec):
