@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import time
 
-API_KEY_ALIENVAULT = 'c63733bf4b4e763170cdda3b9b451c95dd2994aa07e5d4d4a4b216fd47275aed'
+API_KEY_ALIENVAULT = 'c63733bf4b4e763170cdda3b9b451c95dd2994aa07e5d4d4a4b216fd47275aed' # old api key
 
 def get_mitigations(tactic_id):
     tactic_url = f'https://attack.mitre.org/techniques/{tactic_id}'
