@@ -498,5 +498,5 @@ if cve_list:
         message = f'*OPENCVE*\nДобавлена информация о новой уязвимости ```{cve_list[0]}```'
         telegram_alert(message)
     else:
-        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях\n ```{", ".join(cve_list)}```'
+        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях ```{", ".join(cve_list)}```'
         telegram_alert(message)

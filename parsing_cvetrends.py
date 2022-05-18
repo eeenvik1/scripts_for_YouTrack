@@ -542,7 +542,7 @@ for item in top_cve_list:
 
 # Добавление информации о новых уязвимостях в YouTrack
 email_list = []
-print(f'Добавление информации о новых уязвиомстях:')
+print(f'Добавление информации о новых уязвимостях:')
 if add_new_cve:
     for i in range(len(add_new_cve)):
         print(f'{i+1} / {len(add_new_cve)} - {get_cve_data(add_new_cve[i])}')
@@ -562,6 +562,6 @@ if email_list:
         message = f'*CVETRENDS*\nДобавлена информация о новой уязвимости ```{email_list[0]}```'
         telegram_alert(message)
     else:
-        message = f'*CVETRENDS*\nДобавлена информация о новых уязвимостях\n ```{", ".join(email_list)}```'
+        message = f'*CVETRENDS*\nДобавлена информация о новых уязвимостях ```{", ".join(email_list)}```'
         telegram_alert(message)
 

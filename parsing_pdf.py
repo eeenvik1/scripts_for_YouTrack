@@ -526,7 +526,7 @@ if cve_list:
         message = f'*NKCKI*\nДобавлена информация о новой уязвимости ```{cve_list[0]}```'
         telegram_alert(message)
     else:
-        message = f'*NKCKI*\nДобавлена информация о новых уязвимостях\n ```{", ".join(cve_list)}```'
+        message = f'*NKCKI*\nДобавлена информация о новых уязвимостях ```{", ".join(cve_list)}```'
         telegram_alert(message)
 
 
