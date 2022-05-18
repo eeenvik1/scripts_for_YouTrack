@@ -35,6 +35,7 @@ PASSWORD = config.get("PASSWORD_OPENCVE")
 BOT_TOKEN = config.get("BOT_TOKEN")
 CHAT_ID_J = config.get("CHAT_ID_J")
 CHAT_ID_R = config.get("CHAT_ID_R")
+CHAT_ID_L = config.get("CHAT_ID_L")
 
 
 URL = str(YOU_TRACK_BASE_URL) + "/issues"
@@ -450,6 +451,9 @@ def telegram_alert(message):
     # Djenya Alert
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
+    # Lexa Alert
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
 
 # -----------------------------------------------MAIN-----------------------------------------------------------------
 headers = {
@@ -491,8 +495,8 @@ else:
 # telegram alert
 if cve_list:
     if len(cve_list) == 1:
-        message = f'*OPENCVE*\nДобавлена информация о новой уязвимости {cve_list[0]}'
+        message = f'*OPENCVE*\nДобавлена информация о новой уязвимости ```{cve_list[0]}```'
         telegram_alert(message)
     else:
-        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях\n {", ".join(cve_list)}'
+        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях\n ```{", ".join(cve_list)}```'
         telegram_alert(message)

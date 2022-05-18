@@ -36,6 +36,7 @@ USER1 = config.get("USER1")
 BOT_TOKEN = config.get("BOT_TOKEN")
 CHAT_ID_J = config.get("CHAT_ID_J")
 CHAT_ID_R = config.get("CHAT_ID_R")
+CHAT_ID_L = config.get("CHAT_ID_L")
 
 URL = str(YOU_TRACK_BASE_URL) + "/issues"
 
@@ -599,6 +600,9 @@ def telegram_alert(message):
     # Djenya Alert
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
+    # Lexa Alert
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/" + f"sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
 
 
 # convert sec to normak time like 01:35:52------------------------------------------------------------------------------
@@ -656,7 +660,7 @@ current_time = str(time.time() - start_time)
 super_time = convert_to_preferred_format(int(current_time.split(".")[0]))
 start_date = time_start.split(" ")[0]
 start_time = time_start.split(" ")[1]
-message = f'*CHANGING*\nПрограмма начала работу {start_date} в {start_time} и отработала за {super_time}'
+message = f'*CHANGING*\nПрограмма начала работу {start_date} в {start_time} и отработала за ```{super_time}```'
 # telegram alert
 telegram_alert(message)
 # email_alert(time_start, time_stop)
