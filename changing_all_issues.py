@@ -306,6 +306,7 @@ def get_cve_data(cve, id):
         r = nvdlib.getCVE(cve, cpe_dict=False)
         cve_cpe_nodes = r.configurations.nodes
         cpe_nodes = ast.literal_eval(str(r.configurations))
+        # I don't think this is correct
         try:
             score = r.v3score
             vector = r.v3vector
