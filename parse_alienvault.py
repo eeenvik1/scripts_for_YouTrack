@@ -138,13 +138,3 @@ for cve in cve_list:
 time_stop = "Программа отработала за %s секунд" % (time.time() - start_time)
 print(time_stop)
 '''
-
-
-
-
-
-
-
-
-
-
