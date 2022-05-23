@@ -22,6 +22,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 config = dotenv_values(dotenv_path)
+# imported variables from .env
 YOU_TRACK_TOKEN = config.get("YOU_TRACK_TOKEN")
 MAIN_URL_CHANGING = config.get("MAIN_URL_CHANGING")
 YOU_TRACK_PROJECT_ID = config.get("YOU_TRACK_PROJECT_ID")
@@ -38,11 +39,12 @@ BOT_TOKEN = config.get("BOT_TOKEN")
 CHAT_ID_J = config.get("CHAT_ID_J")
 CHAT_ID_R = config.get("CHAT_ID_R")
 CHAT_ID_L = config.get("CHAT_ID_L")
+CHAT_ID_A = config.get("CHAT_ID_A")
 
 URL = str(YOU_TRACK_BASE_URL) + "/issues"
 
 
-# parse mitre.org
+# parse mitre.org-------------------------------------------------------------------------------------------------------
 def get_mitigations(tactic_id):
     # print("get_mitigations") # DEBUG
     tactic_url = f'https://attack.mitre.org/techniques/{tactic_id}'
@@ -69,7 +71,7 @@ def get_mitigations(tactic_id):
         pass
 
 
-# parse alienvault.com-------------------------------------------------------------------------------------------------
+# parse alienvault.com--------------------------------------------------------------------------------------------------
 def get_ttp(cve):
     # print('get_ttp') # DEBUG
     headers_alienvault = {'X-OTX-API-KEY': API_KEY_ALIENVAULT}
@@ -118,7 +120,7 @@ def get_ttp(cve):
         return list(set(result_list))
 
 
-# check info for cve on microsoft--------------------------------------------------------------------------------------
+# check info for cve on microsoft---------------------------------------------------------------------------------------
 def check_microsoft(cve):
     # print('check_microsoft') # DEBUG
     msrc_url = f"https://api.msrc.microsoft.com/cvrf/v2.0/Updates('{cve}')"
@@ -234,7 +236,6 @@ def get_cve_data(cve, id):
         links = []
         exploit_links = []
         links.append(r.url)
-
         for t in r.cve.references.reference_data:
             links.append(t.url)
             if 'Exploit' in t.tags:
@@ -340,7 +341,6 @@ def get_cve_data(cve, id):
             'mitigations_links': mitigations_links
         }
         message = jinja2.Template(template).render(d=data)
-        print(message)
 
         # check for product_vendor-------------------------------------------------------------------------------------
         headers_for_data_prod = {
@@ -515,18 +515,23 @@ def email_alert(time_start, time_stop):
 #alert on telegram bot-------------------------Использовать на свой страх и риск----------------------------------------
 def telegram_alert(message):
     sticker = random.choice(stickers)
-    # Ruslan Alert
+    # R Alert
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_R}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/"f"sendSticker?chat_id={CHAT_ID_R}&sticker={sticker}")
-    # Djenya Alert
+    # Dj Alert
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
-    # Lexa Alert
+    # L Alert
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_L}&sticker={sticker}")
+    # A Alert
+    requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_A}&text={message}&parse_mode=markdown")
+    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_A}&sticker={sticker}")
+
 
 # convert sec to normak time like 01:35:52------------------------------------------------------------------------------
 def convert_to_preferred_format(sec):
