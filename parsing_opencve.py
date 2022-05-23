@@ -41,7 +41,7 @@ CHAT_ID_L = config.get("CHAT_ID_L")
 URL = str(YOU_TRACK_BASE_URL) + "/issues"
 
 
-# parse github/nu11secur1ty-----------------------------------------------------------------------------------------
+# check https://github.com/nu11secur1ty/ -------------------------------------------------------------------------------
 def get_exploit_info(cve):
     link = 'https://github.com/nu11secur1ty/CVE-mitre'
     link_2 = 'https://github.com/nu11secur1ty/CVE-mitre/tree/main/2022'
@@ -67,7 +67,22 @@ def get_exploit_info(cve):
     return default_link
 
 
-# parse opencve.io--------------------------------------------------------------------------------------------------
+# check https://github.com/trickest/cve/ -------------------------------------------------------------------------------
+def get_exploit_info_2(cve):
+    # print('get_exploit_info_2') # DEBUG
+    year = cve.split('-')[1]
+    link = f'https://github.com/trickest/cve/tree/main/{year}'
+    r = requests.get(link)
+    soup = BeautifulSoup(r.text, "html.parser")
+    default_link = ''
+    for cve_id in soup.find_all("span", class_="css-truncate css-truncate-target d-block width-fit"):
+        if f'{cve}.md' == cve_id.text:
+            default_link = f'**trickest/cve** - https://github.com/trickest/cve/tree/main/{year}/{cve}.md'
+            break
+    return default_link
+
+
+# parse opencve.io------------------------------------------------------------------------------------------------------
 def parsing_opencve():
     url1 = 'https://www.opencve.io/login/'
     url2 = 'https://www.opencve.io/login'
@@ -206,8 +221,12 @@ def get_cve_data(cve):
         links.append(t.url)
         if 'Exploit' in t.tags:
             exploit_links.append(t.url)
-    if get_exploit_info(cve):
+
+    if get_exploit_info(cve):  # check https://github.com/nu11secur1ty/
         exploit_links.append(get_exploit_info(cve))
+    if get_exploit_info_2(cve):  # check https://github.com/trickest/cve/
+        exploit_links.append(get_exploit_info_2(cve))
+
     cpe_for_product_vendors = []
     if cpe_nodes:
         for conf in cve_cpe_nodes:

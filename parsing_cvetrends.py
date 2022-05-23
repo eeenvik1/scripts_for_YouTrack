@@ -37,6 +37,7 @@ CHAT_ID_L = config.get("CHAT_ID_L")
 
 URL = str(YOU_TRACK_BASE_URL) + "/issues"
 
+
 def get_top_cve_list():
     link = 'https://cvetrends.com/api/cves/24hrs'
     r = requests.get(link)
@@ -66,10 +67,12 @@ def add_tag(id):
     diff = requests.post(url_differences, headers=headers, json=request_payload)
     return diff.status_code
 
+
 def delete_tag(id):
     URL1 = f'{YOU_TRACK_BASE_URL}/issues/{id}/tags/6-27'
     delete = requests.delete(URL1, headers=headers)
     return delete.status_code
+
 
 def change_tag(id):
     request_payload = {
@@ -88,6 +91,8 @@ def change_tag(id):
     diff = requests.post(url_differences, headers=headers, json=request_payload)
     return diff.status_code
 
+
+# check https://github.com/nu11secur1ty/ -------------------------------------------------------------------------------
 def get_exploit_info(cve):
     link = 'https://github.com/nu11secur1ty/CVE-mitre'
     link_2 = 'https://github.com/nu11secur1ty/CVE-mitre/tree/main/2022'
@@ -110,6 +115,21 @@ def get_exploit_info(cve):
     for item in poc_cve_list:
         if cve == item:
             default_link = f'https://github.com/nu11secur1ty/CVE-mitre/tree/main/{cve}'
+    return default_link
+
+
+# check https://github.com/trickest/cve/ -------------------------------------------------------------------------------
+def get_exploit_info_2(cve):
+    # print('get_exploit_info_2') # DEBUG
+    year = cve.split('-')[1]
+    link = f'https://github.com/trickest/cve/tree/main/{year}'
+    r = requests.get(link)
+    soup = BeautifulSoup(r.text, "html.parser")
+    default_link = ''
+    for cve_id in soup.find_all("span", class_="css-truncate css-truncate-target d-block width-fit"):
+        if f'{cve}.md' == cve_id.text:
+            default_link = f'**trickest/cve** - https://github.com/trickest/cve/tree/main/{year}/{cve}.md'
+            break
     return default_link
 
 
@@ -205,8 +225,12 @@ def get_cve_data(cve):
             links.append(t.url)
             if 'Exploit' in t.tags:
                 exploit_links.append(t.url)
-        if get_exploit_info(cve):
+
+        if get_exploit_info(cve):  # check https://github.com/nu11secur1ty/
             exploit_links.append(get_exploit_info(cve))
+        if get_exploit_info_2(cve):  # check https://github.com/trickest/cve/
+            exploit_links.append(get_exploit_info_2(cve))
+
         cpe_for_product_vendors = []
         if cpe_nodes:
             for conf in cve_cpe_nodes:
@@ -218,7 +242,7 @@ def get_cve_data(cve):
                     for cpe in child.cpe_match:
                         cpe_for_product_vendors.append(cpe.cpe23Uri)
 
-    #parse CPE--------------------------------------------------------------------------------------------------------------
+    # parse CPE---------------------------------------------------------------------------------------------------------
         product_vendor_list = []
         product_image_list = []
         version_list = []
@@ -256,7 +280,7 @@ def get_cve_data(cve):
         if not exploit_links:
             value = "Нет"
 
-    #check regex in cve-----------------------------------------------------------------------------------------------------
+    # check regex in cve------------------------------------------------------------------------------------------------
         cve_name = ''
         cve_info = r.cve.description.description_data[0].value
         for item in pattern:
@@ -265,7 +289,7 @@ def get_cve_data(cve):
                 break
             else:
                 cve_name = cve
-    #message----------------------------------------------------------------------------------------------------------------
+    # message-----------------------------------------------------------------------------------------------------------
         data = {
             'cve': cve_info,
             'lastModifiedDate': r.lastModifiedDate[:-7],
@@ -279,7 +303,7 @@ def get_cve_data(cve):
         }
         message = jinja2.Template(template).render(d=data)
 
-    #check for product_vendor-----------------------------------------------------------------------------------------------
+    # check for product_vendor------------------------------------------------------------------------------------------
         headers = {
             "Accept": "application/json",
             "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -308,7 +332,7 @@ def get_cve_data(cve):
             }
             requests.post(URL_GET_PRODUCTS, headers=headers, json=payload)
 
-    # check for versions----------------------------------------------------------------------------------------------------
+    # check for versions------------------------------------------------------------------------------------------------
         headers = {
             "Accept": "application/json",
             "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -333,7 +357,7 @@ def get_cve_data(cve):
             }
             requests.post(URL_GET_VERSIONS, headers=headers, json=payload)
 
-    # upload information on cve---------------------------------------------------------------------------------------------
+    # upload information on cve ----------------------------------------------------------------------------------------
         buff_content = []
         buff_versions = []
         if re.search(r'windows', product_vendor_list[0]):
@@ -461,7 +485,7 @@ def email_alert(cve_list):
     print('Email sent {}'.format(msg['Subject']))
 
 
-#alert on telegram bot-------------------------Использовать на свой страх и риск----------------------------------------
+# alert on telegram bot--------------------Использовать на свой страх и риск--------------------------------------------
 def telegram_alert(message):
     sticker = random.choice(stickers)
     # Ruslan Alert
@@ -478,7 +502,7 @@ def telegram_alert(message):
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_L}&sticker={sticker}")
 
 
-#------------------------------MAIN-------------------------------------------------------------------------------------
+# ------------------------------------------------------MAIN------------------------------------------------------------
 headers = {
     "Accept": "application/json",
     "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -488,9 +512,9 @@ headers = {
 list_summary = requests.get(MAIN_URL_CVETRENDS, headers=headers).json()  # Получение задач с YouTrack
 
 # Получение информации по cve с YouTrack
-cve_list = [] #CVE id
-id_list = []  #ID Задачи
-tag_id = []   #ID Тэга
+cve_list = []  # CVE id
+id_list = []  # ID Задачи
+tag_id = []   # ID Тэга
 for i, item in enumerate(list_summary):
     regex = re.search(r'CVE-\d{4}-\d{4,8}', str(list_summary[i]['summary']))
     if regex != None:

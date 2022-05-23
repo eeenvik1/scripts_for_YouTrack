@@ -42,7 +42,7 @@ URL = str(YOU_TRACK_BASE_URL) + "/issues"
 PATH = os.path.join(os.path.dirname(__file__), 'bulletins')
 
 
-# parse github/nu11secur1ty------------------------------------------------------------------------------------------
+# check https://github.com/nu11secur1ty/ -------------------------------------------------------------------------------
 def get_exploit_info(cve):
     link = 'https://github.com/nu11secur1ty/CVE-mitre'
     link_2 = 'https://github.com/nu11secur1ty/CVE-mitre/tree/main/2022'
@@ -65,6 +65,21 @@ def get_exploit_info(cve):
     for item in poc_cve_list:
         if cve == item:
             default_link = f'https://github.com/nu11secur1ty/CVE-mitre/tree/main/{cve}'
+    return default_link
+
+
+# check https://github.com/trickest/cve/ -------------------------------------------------------------------------------
+def get_exploit_info_2(cve):
+    # print('get_exploit_info_2') # DEBUG
+    year = cve.split('-')[1]
+    link = f'https://github.com/trickest/cve/tree/main/{year}'
+    r = requests.get(link)
+    soup = BeautifulSoup(r.text, "html.parser")
+    default_link = ''
+    for cve_id in soup.find_all("span", class_="css-truncate css-truncate-target d-block width-fit"):
+        if f'{cve}.md' == cve_id.text:
+            default_link = f'**trickest/cve** - https://github.com/trickest/cve/tree/main/{year}/{cve}.md'
+            break
     return default_link
 
 
@@ -230,8 +245,12 @@ def get_cve_data(cve):
             links.append(t.url)
             if 'Exploit' in t.tags:
                 exploit_links.append(t.url)
-        if get_exploit_info(cve):
+
+        if get_exploit_info(cve):  # check https://github.com/nu11secur1ty/
             exploit_links.append(get_exploit_info(cve))
+        if get_exploit_info_2(cve):  # check https://github.com/trickest/cve/
+            exploit_links.append(get_exploit_info_2(cve))
+
         cpe_for_product_vendors = []
         if cpe_nodes:
             for conf in cve_cpe_nodes:
@@ -464,7 +483,7 @@ def email_alert(cve_list):
     print('Email sent {}'.format(msg['Subject']))
 
 
-#alert on telegram bot-------------------------Использовать на свой страх и риск----------------------------------------
+# alert on telegram bot------------------------Использовать на свой страх и риск----------------------------------------
 def telegram_alert(message):
     sticker = random.choice(stickers)
     sticker = random.choice(stickers)
@@ -482,7 +501,7 @@ def telegram_alert(message):
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_L}&sticker={sticker}")
 
 
-#-----------------------------------------------MAIN--------------------------------------------------------------------
+# ---------------------------------------------------MAIN---------------------------------------------------------------
 headers = {
     "Accept": "application/json",
     "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
