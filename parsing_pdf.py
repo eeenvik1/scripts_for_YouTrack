@@ -16,6 +16,7 @@ from email.message import EmailMessage
 from dotenv import dotenv_values
 import random
 from stickers import stickers
+from usage import pattern, template
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -151,80 +152,8 @@ def remove_pdf_file(path):
         os.remove(item)
 
 
-# ---------------------------------------------------------------------------------------------------------------------
+# main function for upload information on YT----------------------------------------------------------------------------
 def get_cve_data(cve):
-    template = """
-### Описание
-
-{{d.cve}}
-
-### Дата публикации
-
-{{d.lastModifiedDate}}
-
-### Дата выявления
-
-{{d.publishedDate}}
-
-### Продукт, вендор
-
-<details>
-
-{% for vendor in d.product_vendor_list %}{{vendor}}
-{% endfor %}
-
-</details>
-
-### CVSSv3 Score
-
-{{d.score}}
-
-### CVSSv3 Vector
-
-{{d.vector}}
-
-### CPE
-<details>
-
-{% if d.configurations.nodes %}
-{% for conf in d.configurations.nodes %}
-
-#### Configuration {{ loop.index }}
-{% if conf.operator == 'AND'%}{% set children = conf.children %}{% else %}{% set children = [conf] %}{% endif %}{% if children|length > 1 %}
-**AND:**{% endif %}{% for child in children %}{% if child.cpe_match|length > 1 %}**OR:**{% endif %}{% for cpe in child.cpe_match %}
-{{ cpe.cpe23Uri | replace("*", "\*") }}{% endfor %}{% endfor %}{% endfor %}
-{% endif %}
-</details>
-
-### Links
-<details>
-
-{% for link in d.links %}{{ link }}
-{% endfor %}
-
-
-{% if d.exploit_links %}
-
-### Exploit
-
-{% for exploit in d.exploit_links %}{{exploit}}
-{% endfor %}
-{% endif %}
-
-</details>
-    """
-
-    pattern = ['Stack-based buffer overflow', 'Arbitrary command execution', 'Obtain sensitive information',
-               'Local privilege escalation', 'Security Feature Bypass', 'Out-of-bounds read', 'Out of bounds read',
-               'Denial of service', 'Denial-of-service', 'Execute arbitrary code', 'Expose the credentials',
-               'Cross-site scripting (XSS)', 'Privilege escalation', 'Reflective XSS Vulnerability',
-               'Execution of arbitrary programs', 'Server-side request forgery (SSRF)', 'Stack overflow',
-               'Execute arbitrary commands', 'Obtain highly sensitive information', 'Bypass security',
-               'Remote Code Execution', 'Memory Corruption', 'Arbitrary code execution', 'CSV Injection',
-               'Heap corruption', 'Out of bounds memory access', 'Sandbox escape', 'NULL pointer dereference',
-               'Remote Code Execution', 'RCE', 'Authentication Error', 'Use-After-Free', 'Use After Free',
-               'Corrupt Memory', 'Execute Untrusted Code', 'Run Arbitrary Code', 'heap out-of-bounds write',
-               'OS Command injection', 'Elevation of Privilege']
     try:
         r = nvdlib.getCVE(cve, cpe_dict=False)
         cve_cpe_nodes = r.configurations.nodes
@@ -262,7 +191,7 @@ def get_cve_data(cve):
                     for cpe in child.cpe_match:
                         cpe_for_product_vendors.append(cpe.cpe23Uri)
 
-    #parse CPE--------------------------------------------------------------------------------------------------------
+    # parse CPE---------------------------------------------------------------------------------------------------------
         product_vendor_list = []
         product_image_list = []
         version_list = []
@@ -300,7 +229,7 @@ def get_cve_data(cve):
         if not exploit_links:
             value = "Нет"
 
-    #check regex in cve-----------------------------------------------------------------------------------------------
+    # check regex in cve------------------------------------------------------------------------------------------------
         cve_name = ''
         cve_info = r.cve.description.description_data[0].value
         for item in pattern:
@@ -309,7 +238,7 @@ def get_cve_data(cve):
                 break
             else:
                 cve_name = cve
-    #message----------------------------------------------------------------------------------------------------------
+    # message-----------------------------------------------------------------------------------------------------------
         data = {
             'cve': cve_info,
             'lastModifiedDate': r.lastModifiedDate[:-7],
@@ -323,7 +252,7 @@ def get_cve_data(cve):
         }
         message = jinja2.Template(template).render(d=data)
 
-    #check for product_vendor-----------------------------------------------------------------------------------------
+    # check for product_vendor------------------------------------------------------------------------------------------
         headers = {
             "Accept": "application/json",
             "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -352,7 +281,7 @@ def get_cve_data(cve):
             }
             requests.post(URL_GET_PRODUCTS, headers=headers, json=payload)
 
-    # check for versions-----------------------------------------------------------------------------------------------
+    # check for versions------------------------------------------------------------------------------------------------
         headers = {
             "Accept": "application/json",
             "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -554,7 +483,7 @@ if cve_list:
 
 
 # remove pdf buffer-----------------------------------------------------------------------------------------------------
-time.sleep(2)
+time.sleep(1)
 path_to_remove_pdf = []
 for item in name_list:
     path_to_remove_pdf.append(f'{PATH}/{item}')

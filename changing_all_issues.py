@@ -16,6 +16,7 @@ from dotenv import dotenv_values
 import os
 import random
 from stickers import stickers
+from usage import pattern, template
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -217,111 +218,10 @@ def get_exploit_info_2(cve):
 # main function for upload information on YT----------------------------------------------------------------------------
 def get_cve_data(cve, id):
     # print('get_cve_data') # DEBUG
-    template = """
-### Описание
-
-{{d.cve}}
-
-### Дата публикации
-
-{{d.lastModifiedDate}}
-
-### Дата выявления
-
-{{d.publishedDate}}
-
-
-### Продукт, вендор
-
-<details>
-
-{% for vendor in d.product_vendor_list %}{{vendor}}
-{% endfor %}
-
-
-</details>
-
-### CVSSv3 Score
-
-{{d.score}}
-
-### CVSSv3 Vector
-
-{{d.vector}}
-
-### CPE
-<details>
-
-{% if d.configurations.nodes %}
-{% for conf in d.configurations.nodes %}
-
-#### Configuration {{ loop.index }}
-{% if conf.operator == 'AND'%}{% set children = conf.children %}{% else %}{% set children = [conf] %}{% endif %}{% if children|length > 1 %}
-**AND:**{% endif %}{% for child in children %}{% if child.cpe_match|length > 1 %}**OR:**{% endif %}{% for cpe in child.cpe_match %}
-{{ cpe.cpe23Uri | replace("*", "\*") }}{% endfor %}{% endfor %}{% endfor %}
-{% endif %}
-</details>
-
-### Links
-<details>
-
-{% for link in d.links %}{{ link }}
-{% endfor %}
-
-
-{% if d.exploit_links %}
-
-### Exploit
-
-{% for exploit in d.exploit_links %}{{exploit}}
-{% endfor %}
-{% endif %}
-
-</details>
-
-
-{%if d.kb_links %}
-
-### Решение от майкрософт
-<details>
-<summary>Установить следующие обновления безопасности</summary>
-
-{% for link in d.kb_links %}{{link}}
-{% endfor %}
-{% endif %}
-
-</details>
-
-
-{%if d.mitigations_links %}
-
-### Mitigations от MITRE
-<details>
-<summary>Mitigation_ID and link</summary>
-
-{% for link in d.mitigations_links %}{{link}}
-{% endfor %}
-{% endif %}
-
-</details>
-"""
-
-    pattern = ['Stack-based buffer overflow', 'Arbitrary command execution', 'Obtain sensitive information',
-               'Local privilege escalation', 'Security Feature Bypass', 'Out-of-bounds read', 'Out of bounds read',
-               'Denial of service', 'Denial-of-service', 'Execute arbitrary code', 'Expose the credentials',
-               'Cross-site scripting (XSS)', 'Privilege escalation', 'Reflective XSS Vulnerability',
-               'Execution of arbitrary programs', 'Server-side request forgery (SSRF)', 'Stack overflow',
-               'Execute arbitrary commands', 'Obtain highly sensitive information', 'Bypass security',
-               'Remote Code Execution', 'Memory Corruption', 'Arbitrary code execution', 'CSV Injection',
-               'Heap corruption', 'Out of bounds memory access', 'Sandbox escape', 'NULL pointer dereference',
-               'Remote Code Execution', 'RCE', 'Authentication Error', 'Use-After-Free', 'Use After Free',
-               'Corrupt Memory', 'Execute Untrusted Code', 'Run Arbitrary Code', 'heap out-of-bounds write',
-               'OS Command injection', 'Elevation of Privilege']
     try:
         r = nvdlib.getCVE(cve, cpe_dict=False)
         cve_cpe_nodes = r.configurations.nodes
         cpe_nodes = ast.literal_eval(str(r.configurations))
-        # I don't think this is correct
         try:
             score = r.v3score
             vector = r.v3vector
@@ -440,6 +340,7 @@ def get_cve_data(cve, id):
             'mitigations_links': mitigations_links
         }
         message = jinja2.Template(template).render(d=data)
+        print(message)
 
         # check for product_vendor-------------------------------------------------------------------------------------
         headers_for_data_prod = {
@@ -677,6 +578,7 @@ for i, item in enumerate(cve_list):
     print(f'{result_string}{escape*abs(subtraction)} - {result_status_code}')  # Красивый вывод информации
     # print(f'{i + 1} / {len(cve_list)} ({cve_list[i]}) - {result_status_code}')
 
+# Time manipulation
 time_stop = "за %s секунд" % (time.time() - start_time)
 current_time = str(time.time() - start_time)
 super_time = convert_to_preferred_format(int(current_time.split(".")[0]))
