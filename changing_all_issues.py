@@ -76,11 +76,11 @@ def get_ttp(cve):
     # print('get_ttp') # DEBUG
     headers_alienvault = {'X-OTX-API-KEY': API_KEY_ALIENVAULT}
     url = f'https://otx.alienvault.com/api/v1/indicators/cve/{cve}'
-    pattern = '{"detail": "endpoint not found"}'
+    pattern_default_answer = '{"detail": "endpoint not found"}'
     r_get_cve_info = requests.get(url, headers=headers_alienvault)
     s_get_cve_info = BeautifulSoup(r_get_cve_info.text, 'lxml')
     tactic_list = []
-    if str(s_get_cve_info.p.contents).replace("['", "").replace("']", "") == pattern:
+    if str(s_get_cve_info.p.contents).replace("['", "").replace("']", "") == pattern_default_answer:
         print(f'no information for {cve}')  # DEBUG
     else:
         content = json.loads(str(s_get_cve_info.p).replace("<p>", "").replace("</p>", ""))
@@ -224,6 +224,8 @@ def get_cve_data(cve, id):
         r = nvdlib.getCVE(cve, cpe_dict=False)
         cve_cpe_nodes = r.configurations.nodes
         cpe_nodes = ast.literal_eval(str(r.configurations))
+
+        # parse CVSSv3 Score and CVSSv3 Vector--------------------------------------------------------------------------
         try:
             score = r.v3score
             vector = r.v3vector
@@ -233,6 +235,7 @@ def get_cve_data(cve, id):
         if vector != "Нет: cvss vector":
             vector = r.v3vector[9:len(r.v3vector)]
 
+        # find Exploit links--------------------------------------------------------------------------------------------
         links = []
         exploit_links = []
         links.append(r.url)
@@ -244,7 +247,11 @@ def get_cve_data(cve, id):
             exploit_links.append(get_exploit_info(cve))
         if get_exploit_info_2(cve):  # check https://github.com/trickest/cve/
             exploit_links.append(get_exploit_info_2(cve))
+        value_exploit = "Да"
+        if not exploit_links:
+            value_exploit = "Нет"
 
+        # parse CPE for further processing------------------------------------------------------------------------------
         cpe_for_product_vendors = []
         if cpe_nodes:
             for conf in cve_cpe_nodes:
@@ -256,7 +263,7 @@ def get_cve_data(cve, id):
                     for cpe in child.cpe_match:
                         cpe_for_product_vendors.append(cpe.cpe23Uri)
 
-        # parse CPE--------------------------------------------------------------------------------------------------
+        # parse product and vector--------------------------------------------------------------------------------------
         product_vendor_list = []
         product_image_list = []
         version_list = []
@@ -293,11 +300,7 @@ def get_cve_data(cve, id):
             con = {"name": item_4}
             content.append(con)
 
-        value = "Да"
-        if not exploit_links:
-            value = "Нет"
-
-        # check regex in cve------------------------------------------------------------------------------------------
+        # check regex name in cve (like: LPE, RCE...)-------------------------------------------------------------------
         cve_name = ''
         cve_info = r.cve.description.description_data[0].value
         for item_5 in pattern:
@@ -326,7 +329,7 @@ def get_cve_data(cve, id):
         except:
             value_mitigations = 'Нет'
 
-        # message-------------------------------------------------------------------------------------------------------
+        # forming message for payload-----------------------------------------------------------------------------------
         data = {
             'cve': cve_info,
             'lastModifiedDate': r.lastModifiedDate[:-7],
@@ -342,7 +345,7 @@ def get_cve_data(cve, id):
         }
         message = jinja2.Template(template).render(d=data)
 
-        # check for product_vendor-------------------------------------------------------------------------------------
+        # check for product_vendor--------------------------------------------------------------------------------------
         headers_for_data_prod = {
             "Accept": "application/json",
             "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
@@ -390,7 +393,7 @@ def get_cve_data(cve, id):
             }
             requests.post(URL_GET_VERSIONS, headers=headers_for_data_prod, json=payload)
 
-        # upload information on cve-------------------------------------------------------------------------------------
+        # replace vendor name on normal name----------------------------------------------------------------------------
         buff_content = []
         buff_versions = []
         if product_vendor_list:
@@ -412,6 +415,7 @@ def get_cve_data(cve, id):
                 if versions:
                     buff_versions.append(versions[0])
 
+        # gradation of vulnerability criticality------------------------------------------------------------------------
         priority = ''
         if isinstance(score, float):
             if 0.1 <= score <= 3.9:
@@ -423,6 +427,7 @@ def get_cve_data(cve, id):
             elif 9.0 <= score <= 10.0:
                 priority = 'Критическая'
 
+        # forming payload for YT issue----------------------------------------------------------------------------------
         request_payload = {
             "project": {
                 "id": YOU_TRACK_PROJECT_ID
@@ -438,7 +443,7 @@ def get_cve_data(cve, id):
                 {
                     "name": "Есть эксплоит",
                     "$type": "SingleEnumIssueCustomField",
-                    "value": {"name": value}
+                    "value": {"name": value_exploit}
                 },
                 {
                     "name": "Affected versions",
@@ -470,6 +475,7 @@ def get_cve_data(cve, id):
             ]
         }
 
+        # upload information on cve-------------------------------------------------------------------------------------
         url_differences = f'{YOU_TRACK_BASE_URL}/issues/{id}'
         diff = requests.post(url_differences, headers=headers_for_data_prod, json=request_payload)
         return diff.status_code

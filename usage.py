@@ -8,7 +8,7 @@ pattern = ['Stack-based buffer overflow', 'Arbitrary command execution', 'Obtain
            'Heap corruption', 'Out of bounds memory access', 'Sandbox escape', 'NULL pointer dereference',
            'Remote Code Execution', 'RCE', 'Authentication Error', 'Use-After-Free', 'Use After Free',
            'Corrupt Memory', 'Execute Untrusted Code', 'Run Arbitrary Code', 'heap out-of-bounds write',
-           'OS Command injection', 'Elevation of Privilege']
+           'OS Command injection', 'Elevation of Privilege', 'Race condition', 'Access violation', 'Infinite loop']
 
 template = """
 ### Описание
