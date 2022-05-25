@@ -6,9 +6,9 @@
 * Сайт <https://www.first.org/epss/data_stats> - `add_epss.py`;
 * Сайт <https://otx/alienvault.com/> - функция `get_ttp` в скрипте `changing_all_issues.py` для получения тактик (техник) реализации уязвимости;
 * Сайт <https://attack.mitre.org/> - функция `get_mitigations` в скрипте `changing_all_issues.py`, которая получает значения из функции `get_ttp` и возвращает mitigations (смягчающие меры) для закрытия уязвимости;
+* Сайт <https://api.msrc.microsoft.com/> - `get_kb.py` или функция `get_kb`  в каждом из файлов.
 * [Репозиторий nu11secur1ty](https://github.com/nu11secur1ty/CVE-mitre) на гитхабе с эскполитами  - функция `get_exploit_info` в каждом из скриптов;
 * [Репозиторий trickest](https://github.com/trickest/cve/) на гитхабе с PoC'ами  - функция `get_exploit_info_2` в каждом из скриптов.
-
 
 # Install
 Для установки запустить 
@@ -101,7 +101,11 @@ cve_list = ['CVE-2021-27365', 'CVE-2021-28313', 'CVE-2021-28315', 'CVE-2021-3276
 ```
 python3 parse_alienvault.py
 ```
-**Output:**
+**Output (mardown example):**
+
+[M1047 - Audit ](https://attack.mitre.org/mitigations/M1047) 
+
+**Output default:**
 ```
 No mitigations for CVE-2021-27365
 No mitigations for CVE-2021-28313
@@ -140,4 +144,40 @@ No mitigations for CVE-2021-40125
 **Description**
 
 В этом файле лежит массив со стикерами.
-Для того чтобы добавить сюда стикеры, нужно скинуть стикер боту [@idstickerbot](t.me/idstickerbot) и он вернет id стикера, который необходимо положить в массив `stickers`
+Для того чтобы добавить сюда стикеры, нужно скинуть стикер боту [@idstickerbot](t.me/idstickerbot) 
+и он вернет id стикера, который необходимо положить в массив `stickers`.
+
+## get_kb.py
+
+**Description** 
+
+Скрипт собирает информацию об обновлениях безопасности для уязвимостей в продуктах Microsoft.
+На вход принимается идентификатор уязвимости *cve* на выходе - список обновлений 
+безопасности [(KB)](https://msrc.microsoft.com/). Вывод всегда можно поправить, по умолчанию
+он собирается сразу в разметке `markdown`.
+
+
+**Input:**
+```
+cve = 'CVE-2022-26809'
+```
+**Usage:**
+```
+python3 get_kb.py
+```
+**Output (markdown):**
+
+[KB5012647](https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012647) - 2022-04 Cumulative Update for Windows Server 2019 for x64-based Systems
+
+[KB5012591](https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012591) - 2022-04 Cumulative Update for Windows 10 Version 1909 for x64-based Systems
+
+[KB5012599](https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012599) - 2022-04 Dynamic Cumulative Update for Windows 10 Version 20H2 for x64-based Systems
+
+**Output cosmetic:**
+```
+2022-04 Cumulative Update for Windows Server 2019 for x64-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012647
+2022-04 Cumulative Update for Windows 10 Version 1909 for x64-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012591
+2022-04 Dynamic Cumulative Update for Windows 10 Version 21H2 for x86-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012599
+...
+```
+
