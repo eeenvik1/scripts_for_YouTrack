@@ -25,7 +25,7 @@ RV_X_TOKEN = config.get("RV_X_TOKEN")
 RV_NAME = config.get("RV_NAME")
 RV_URL = config.get("RV_URL")
 
-URL = str(YOU_TRACK_BASE_URL) + "/issues"
+URL = str(YOU_TRACK_BASE_URL) + "/issues"  # main url for YT
 
 unix_time = str(time.mktime(datetime.datetime.now().timetuple()))[:-2]
 session = requests.Session()
