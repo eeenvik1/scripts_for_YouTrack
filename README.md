@@ -1,14 +1,32 @@
 # Description
 Скрипты для парсинга различных сайтов:
-* Бюллетени НКЦКИ (<https://safe-surf.ru/>) - `parsing_pdf.py`;
-* Сайт <https://www.opencve.io/> - `parsing_opencve.py`;
-* Сайт <https://cvetrends.com/> - `parsing_cvetrends.py`;
-* Сайт <https://www.first.org/epss/data_stats> - `add_epss.py`;
-* Сайт <https://otx/alienvault.com/> - функция `get_ttp` в скрипте `changing_all_issues.py` для получения тактик (техник) реализации уязвимости;
-* Сайт <https://attack.mitre.org/> - функция `get_mitigations` в скрипте `changing_all_issues.py`, которая получает значения из функции `get_ttp` и возвращает mitigations (смягчающие меры) для закрытия уязвимости;
-* Сайт <https://api.msrc.microsoft.com/> - `get_kb.py` или функция `get_kb`  в каждом из файлов.
+* Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_pdf.py);
+* Сайт <https://www.opencve.io/> - [`parsing_opencve.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_opencve.py);
+* Сайт <https://cvetrends.com/> - [`parsing_cvetrends.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_cvetrends.py);
+* Сайт <https://www.first.org/epss/data_stats> - [`add_epss.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/add_epss.py);
+* Сайт <https://otx/alienvault.com/> - функция `get_ttp` в скрипте [`changing_all_issues.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/changing_all_issues.py) 
+для получения тактик (техник) реализации уязвимости;
+* Сайт <https://attack.mitre.org/> - функция `get_mitigations` в скрипте [`changing_all_issues.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/changing_all_issues.py), 
+которая получает значения из функции `get_ttp` и возвращает mitigations (смягчающие меры) для закрытия уязвимости;
+* Сайт <https://api.msrc.microsoft.com/> - [`get_kb.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/get_kb.py) 
+или функция `get_kb`  в каждом из файлов.
 * [Репозиторий nu11secur1ty](https://github.com/nu11secur1ty/CVE-mitre) на гитхабе с эскполитами  - функция `get_exploit_info` в каждом из скриптов;
 * [Репозиторий trickest](https://github.com/trickest/cve/) на гитхабе с PoC'ами  - функция `get_exploit_info_2` в каждом из скриптов.
+
+Добавлен скрипт для интеграции трекера задач YouTrack и платформы RVision.
+* [`export_YT_to_RV.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/export_YT_to_RV.py)
+
+# Content
+1. [Install](#Install)
+2. [Usage](#Usage)
+3. [Automation](#Automation)
+4. [Examples](#Examples)
+   1. [parse_alienvault.py](##parse_alienvault.py)
+   2. [add_epss.py](##add_epss.py)
+   3. [remove_repetitions.py](##remove_repetitions.py)
+   4. [stickers.py](##stickers.py)
+   5. [get_kb.py](##get_kb.py)
+   6. [export_YT_to_RV.py](##export_YT_to_RV.py)
 
 # Install
 Для установки запустить 
@@ -94,11 +112,11 @@ CHAT_ID_L='<CHAT_ID_L>'  # chat_id user_3
 На вход скрипт принимает список идентификаторов уязвимостей (cve). На выходе выводится список митигэйшэнов сразу в разметке Markdown.
 
 **Input:**
-```
+```shell
 cve_list = ['CVE-2021-27365', 'CVE-2021-28313', 'CVE-2021-28315', 'CVE-2021-32761', 'CVE-2021-40444', 'CVE-2021-44228', 'CVE-2019-17571', 'CVE-2021-43803', 'CVE-2021-43808', 'CVE-2021-41270', 'CVE-2021-34787', 'CVE-2021-40125']
 ```
 **Usage:**
-```
+```shell
 python3 parse_alienvault.py
 ```
 **Output (mardown example):**
@@ -106,7 +124,7 @@ python3 parse_alienvault.py
 [M1047 - Audit ](https://attack.mitre.org/mitigations/M1047) 
 
 **Output default:**
-```
+```shell
 No mitigations for CVE-2021-27365
 No mitigations for CVE-2021-28313
 No mitigations for CVE-2021-28315
@@ -158,11 +176,11 @@ No mitigations for CVE-2021-40125
 
 
 **Input:**
-```
+```shell
 cve = 'CVE-2022-26809'
 ```
 **Usage:**
-```
+```shell
 python3 get_kb.py
 ```
 **Output (markdown):**
@@ -174,10 +192,38 @@ python3 get_kb.py
 [KB5012599](https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012599) - 2022-04 Dynamic Cumulative Update for Windows 10 Version 20H2 for x64-based Systems
 
 **Output cosmetic:**
-```
+```shell
 2022-04 Cumulative Update for Windows Server 2019 for x64-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012647
 2022-04 Cumulative Update for Windows 10 Version 1909 for x64-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012591
 2022-04 Dynamic Cumulative Update for Windows 10 Version 21H2 for x86-based Systems - https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5012599
 ...
 ```
 
+## export_YT_to_RV.py
+
+**Description** 
+
+Скрипт парсит отресерченные в YouTrack уязвимости и заводит рекомендации по закрытию 
+уязвимости задачей в платформу [R-Vision Incident Response Platform](https://rvision.ru/). 
+
+Отресерченная задача имеет два определенных кастомных поля 
+[(customField)](https://www.jetbrains.com/help/youtrack/standalone/Manage-Custom-Fields-Per-Project.html)
+
+**Usage:**
+```shell
+python3 export_YT_to_RV.py
+```
+**Output:**
+```shell
+1 / 2:
+Создана задача TSK-5555
+Добавлено оборудование к задаче TSK-5555
+Добавлен комментарий к задаче 2-11111
+Состояние задачи 2-11111 изменилось
+2 / 2:
+Создана задача TSK-6666
+Добавлено оборудование к задаче TSK-6666
+Добавлен комментарий к задаче 2-22222
+Состояние задачи 2-22222 изменилось
+
+```
