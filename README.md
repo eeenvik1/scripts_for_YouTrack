@@ -27,6 +27,7 @@
    4. [stickers.py](##stickers.py)
    5. [get_kb.py](##get_kb.py)
    6. [export_YT_to_RV.py](##export_YT_to_RV.py)
+   7. [get_cve_from_month_update.py](##get_cve_from_month_update.py)
 
 # Install
 Для установки запустить 
@@ -225,5 +226,25 @@ python3 export_YT_to_RV.py
 Добавлено оборудование к задаче TSK-6666
 Добавлен комментарий к задаче 2-22222
 Состояние задачи 2-22222 изменилось
+```
 
+## get_cve_from_month_update.py
+
+**Description** 
+
+Скрипт парсит сайт с [обновлениями Microsoft](https://msrc.microsoft.com/update-guide/releaseNote/) 
+и собирает список уязвимостей, которые закрываются месячным обновлением от Microsoft.
+
+**Usage:**
+```shell
+python3 get_cve_from_month_update.py
+```
+
+**Output:**
+```shell
+2019-Jan:
+['CVE-2019-0536', 'CVE-2019-0537', 'CVE-2019-0545', 'CVE-2019-0549', 'CVE-2019-0553', 'CVE-2019-0554', 'CVE-2019-0559', 'CVE-2019-0560', 'CVE-2019-0561', 'CVE-2019-0569', 'CVE-2019-0585', 'CVE-2019-0588']
+2019-Feb:
+['CVE-2019-0540(May include further steps)', 'CVE-2019-0600', 'CVE-2019-0601', 'CVE-2019-0602', 'CVE-2019-0615', 'CVE-2019-0616', 'CVE-2019-0619', 'CVE-2019-0621', 'CVE-2019-0628', 'CVE-2019-0635', 'CVE-2019-0636', 'CVE-2019-0643', 'CVE-2019-0648', 'CVE-2019-0658', 'CVE-2019-0660', 'CVE-2019-0661', 'CVE-2019-0664', 'CVE-2019-0669', 'CVE-2019-0676', 'CVE-2019-0686(May include further steps)', 'CVE-2019-0724(May include further steps)', 'CVE-2019-0741']
+...
 ```
