@@ -25,7 +25,7 @@ def get_get_microsoft(url):
 
 
 month_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-year_list = ['2019', '2020', '2021', '2022']  # Тут можно дополнить года
+year_list = ['2018', '2019', '2020', '2021', '2022']  # Тут можно дополнить года
 for year in year_list:
     for month in month_list:
         url_get_cve = f'https://msrc.microsoft.com/update-guide/releaseNote/{year}-{month}'
