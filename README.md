@@ -10,6 +10,7 @@
 которая получает значения из функции `get_ttp` и возвращает mitigations (смягчающие меры) для закрытия уязвимости;
 * Сайт <https://api.msrc.microsoft.com/> - [`get_kb.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/get_kb.py) 
 или функция `get_kb`  в каждом из файлов.
+* Сайт <https://msrc.microsoft.com/update-guide/releaseNote/> - [`get_cve_from_month_update.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/get_cve_from_month_update.py).
 * [Репозиторий nu11secur1ty](https://github.com/nu11secur1ty/CVE-mitre) на гитхабе с эскполитами  - функция `get_exploit_info` в каждом из скриптов;
 * [Репозиторий trickest](https://github.com/trickest/cve/) на гитхабе с PoC'ами  - функция `get_exploit_info_2` в каждом из скриптов.
 
@@ -21,13 +22,13 @@
 2. [Usage](#Usage)
 3. [Automation](#Automation)
 4. [Examples](#Examples)
-   1. [parse_alienvault.py](##parse_alienvault.py)
-   2. [add_epss.py](##add_epss.py)
-   3. [remove_repetitions.py](##remove_repetitions.py)
-   4. [stickers.py](##stickers.py)
-   5. [get_kb.py](##get_kb.py)
-   6. [export_YT_to_RV.py](##export_YT_to_RV.py)
-   7. [get_cve_from_month_update.py](##get_cve_from_month_update.py)
+   1. [parse_alienvault.py](#parse_alienvault.py)
+   2. [add_epss.py](#add_epss.py)
+   3. [remove_repetitions.py](#remove_repetitions.py)
+   4. [stickers.py](#stickers.py)
+   5. [get_kb.py](#get_kb.py)
+   6. [export_YT_to_RV.py](#export_YT_to_RV.py)
+   7. [get_cve_from_month_update.py](#get_cve_from_month_update.py)
 
 # Install
 Для установки запустить 
@@ -86,9 +87,9 @@ CHAT_ID_L='<CHAT_ID_L>'  # chat_id user_3
 
 `CHAT_ID_*` используется для уведомления пользователей через телеграмм бота.
 
-Чтобы создать своего бота, нужно писать этому боту [@BotFather](t.me/BotFather)
+Чтобы создать своего бота, нужно писать этому боту [@BotFather](https://t.me/BotFather)
 
-Чтобы узнать chat_id, нужно писать этому боту [@getmyid_bot](t.me/getmyid_bot)
+Чтобы узнать chat_id, нужно писать этому боту [@getmyid_bot](https://t.me/getmyid_bot)
 
 
 # Automation
@@ -163,7 +164,7 @@ No mitigations for CVE-2021-40125
 **Description**
 
 В этом файле лежит массив со стикерами.
-Для того чтобы добавить сюда стикеры, нужно скинуть стикер боту [@idstickerbot](t.me/idstickerbot) 
+Для того чтобы добавить сюда стикеры, нужно скинуть стикер боту [@idstickerbot](https://t.me/idstickerbot) 
 и он вернет id стикера, который необходимо положить в массив `stickers`.
 
 ## get_kb.py
