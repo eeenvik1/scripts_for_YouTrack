@@ -248,4 +248,4 @@ python3 get_cve_from_month_update.py
 2019-Feb:
 ['CVE-2019-0540(May include further steps)', 'CVE-2019-0600', 'CVE-2019-0601', 'CVE-2019-0602', 'CVE-2019-0615', 'CVE-2019-0616', 'CVE-2019-0619', 'CVE-2019-0621', 'CVE-2019-0628', 'CVE-2019-0635', 'CVE-2019-0636', 'CVE-2019-0643', 'CVE-2019-0648', 'CVE-2019-0658', 'CVE-2019-0660', 'CVE-2019-0661', 'CVE-2019-0664', 'CVE-2019-0669', 'CVE-2019-0676', 'CVE-2019-0686(May include further steps)', 'CVE-2019-0724(May include further steps)', 'CVE-2019-0741']
 ...
-``` 
+```
