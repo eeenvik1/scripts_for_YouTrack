@@ -38,17 +38,17 @@ for year in year_list:
         print(compare_cve_list)
 '''
 
-# Список CVE на текущий месяц
-# Обновления выходят каждый второй вторник каждого месяца, поэтому рекомендуемый порядок запуска в кроне:
-# 0 0 15 * * python3 get_cve_from_month_update.py
+'''Список CVE на текущий месяц
+Обновления выходят каждый второй вторник каждого месяца, поэтому рекомендуемый порядок запуска в кроне:
+0 0 15 * * python3 get_cve_from_month_update.py'''
 year = datetime.datetime.today().strftime('%Y')
 month = datetime.datetime.today().strftime('%B')[0:3]
 url_get_cve = f'https://msrc.microsoft.com/update-guide/releaseNote/{year}-{month}'
 compare_cve_list = get_cve_from_microsoft(url_get_cve)
 print(f'{year}-{month}:')
 
-# Можно подтянуть функцию из скрипта get_kb.py, чтобы "на лету" получать список необходимых
-# для закрытия обновлений безопасности (KB)
+'''Можно подтянуть функцию из скрипта get_kb.py, чтобы "на лету" получать список необходимых
+для закрытия уязвимостей обновлений безопасности (KB)'''
 
 for cve in compare_cve_list:
     update_list = get_kb(cve)
