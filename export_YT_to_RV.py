@@ -61,7 +61,7 @@ def auth(task_name, task_description, product_list):
 
     start_date = datetime.datetime.today().strftime('%Y-%m-%d')
     date_format = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-    end_date = date_format + datetime.timedelta(days=10)
+    end_date = date_format + datetime.timedelta(days=30)
     duedate = str(end_date).replace(' ', 'T') + 'Z'
 
     # Информация по задаче
@@ -115,6 +115,8 @@ headers_main = {
     "Authorization": "Bearer {}".format(YOU_TRACK_TOKEN),
     "Content-Type": "application/json"
 }
+
+
 list_summary = requests.get(MAIN_URL_FOR_RV, headers=headers_main).json()  # Получение задач с YouTrack
 # print(len(list_summary))  # Количество заведенных задач
 
@@ -145,11 +147,24 @@ if cve_list:
                 product_list.append(name_of_product)
         product_list_no_repetitions = list(set(product_list))  # Получение списка продуктов
 
-        # Получение наименования уязвимости
-        cve_name = cve_list[i]['summary']
-
         # Получение ID задачи в YT
         issueID = id_list[i]
+
+        # Получение наименования уязвимости или уязвимостей (из связанных задач)
+        url_get_relations = URL + f'/{issueID}/links?fields=issues(summary)'
+        response_get_VM = requests.get(url_get_relations, headers=headers_main, verify=False)
+        buff = response_get_VM.json()
+        name_list = []
+        for a, summary in enumerate(buff[0]['issues']):
+            if len(summary['summary']) > 20:
+                name_list.append(summary['summary'].split(' - ')[0])
+            else:
+                name_list.append(summary['summary'])
+        if len(name_list) > 1:
+            cve_name = ", ".join(name_list)
+            task_name = f'Задача по устранению уязвимостей {cve_name}'
+        else:
+            task_name = f'Задача по устранению уязвимости {name_list[0]}'
 
         # Получение рекомендаций
         url_comments = URL + f'/{issueID}/comments?fields=text'
@@ -162,8 +177,9 @@ if cve_list:
 
         # Вывод количества итераций
         print(f'{i+1} / {len(cve_list)}')
+
         # Создание задачи в RVision
-        task_id = auth(cve_name, mitigations, product_list_no_repetitions)
+        task_id = auth(task_name, mitigations, product_list_no_repetitions)
 
         # Добавление комментария в YouTrack с номером задачи из RVision
         url_add_comment = URL + f'/{issueID}/comments'
