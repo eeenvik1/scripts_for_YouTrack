@@ -55,13 +55,14 @@ def get_kb(cve):
 
     return link_list
 
-
+'''
 cve = 'CVE-2022-26809'
 link_list = get_kb(cve)
 for item in link_list:
     print(item)
-    '''
+
     format_sting_1 = item.split(']')[1].replace('(', '').replace(')', '')  # cosmetic output
     result_string = format_sting_1.split(' - ')  # cosmetic output
     print(f'{result_string[1]} - {result_string[0]}')
-    '''
+
+'''

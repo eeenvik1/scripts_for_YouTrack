@@ -37,7 +37,6 @@ PASSWORD = config.get("PASSWORD_OPENCVE")
 BOT_TOKEN = config.get("BOT_TOKEN")
 CHAT_ID_J = config.get("CHAT_ID_J")
 CHAT_ID_R = config.get("CHAT_ID_R")
-CHAT_ID_L = config.get("CHAT_ID_L")
 CHAT_ID_A = config.get("CHAT_ID_A")
 
 
@@ -403,10 +402,6 @@ def telegram_alert(message):
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_J}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_J}&sticker={sticker}")
-    # L Alert
-    requests.get(
-        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_L}&text={message}&parse_mode=markdown")
-    requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_L}&sticker={sticker}")
     # A Alert
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_A}&text={message}&parse_mode=markdown")
