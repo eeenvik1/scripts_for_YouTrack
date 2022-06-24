@@ -16,7 +16,7 @@ def get_cve_from_microsoft(url):
     options = webdriver.ChromeOptions()
     driver = webdriver.Chrome(executable_path=webdriver_path, options=options)
     driver.get(url)
-    time.sleep(3)  # Если не успевает прогрузить страницу, то увеличить количество секунд на задержку
+    time.sleep(5)  # Если не успевает прогрузить страницу, то увеличить количество секунд на задержку
     page_source = driver.execute_script("return document.body.innerHTML;")
     s_response = BeautifulSoup(page_source, "html.parser")
     cve_list = []
@@ -46,12 +46,15 @@ month = datetime.datetime.today().strftime('%B')[0:3]
 url_get_cve = f'https://msrc.microsoft.com/update-guide/releaseNote/{year}-{month}'
 compare_cve_list = get_cve_from_microsoft(url_get_cve)
 print(f'{year}-{month}:')
+for cve in compare_cve_list:
+    print(cve)
 
 '''Можно подтянуть функцию из скрипта get_kb.py, чтобы "на лету" получать список необходимых
 для закрытия уязвимостей обновлений безопасности (KB)'''
-
+'''
 for cve in compare_cve_list:
     update_list = get_kb(cve)
     print(cve)
     for item in update_list:
         print(item)
+'''

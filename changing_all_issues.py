@@ -228,7 +228,7 @@ def get_cve_data(cve, id):
         try:
             score = r.v3score
             vector = r.v3vector
-        except:
+        except AttributeError:
             score = 0.1
             vector = "Нет: cvss vector"
         if vector != "Нет: cvss vector":
@@ -314,7 +314,7 @@ def get_cve_data(cve, id):
         try:
             if check_microsoft(cve) == 200:
                 kb_links = get_kb(cve)
-        except:
+        except AttributeError:
             pass
 
         # check mitigations for cve-------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ def get_cve_data(cve, id):
             if links_mitigations_mitre != 'NO TTP' and links_mitigations_mitre:
                 mitigations_links = links_mitigations_mitre
                 value_mitigations = 'Да'
-        except:
+        except AttributeError:
             value_mitigations = 'Нет'
 
         # forming message for payload-----------------------------------------------------------------------------------
@@ -480,7 +480,7 @@ def get_cve_data(cve, id):
         return diff.status_code
         # return request_payload  # DEBUG
 
-    except:
+    except LookupError:
         now_time = datetime.datetime.now()
         message = f'По состоянию на {now_time.strftime("%d-%m-%Y %H:%M")} информация об уязвимости отсутствует'
         headers = {
@@ -571,6 +571,8 @@ for i, item in enumerate(list_summary):
         if issue_state != state_1 and issue_state != state_2 and issue_state != state_3:
             cve_list.append(str(regex.group()))
             id_list.append(list_summary[i]['id'])
+
+# print(len(cve_list))  # DEBUG
 
 for i, item in enumerate(cve_list):
     # Перебор с конца списка
