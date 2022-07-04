@@ -10,6 +10,7 @@
 которая получает значения из функции `get_ttp` и возвращает mitigations (смягчающие меры) для закрытия уязвимости;
 * Сайт <https://api.msrc.microsoft.com/> - [`get_kb.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/get_kb.py) 
 или функция `get_kb`  в каждом из файлов.
+* Сайт <https://www.cisa.gov/known-exploited-vulnerabilities-catalog> [`use_real_attack.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/use_real_attack.py)
 * Сайт <https://msrc.microsoft.com/update-guide/releaseNote/> - [`get_cve_from_month_update.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/get_cve_from_month_update.py).
 * [Репозиторий nu11secur1ty](https://github.com/nu11secur1ty/CVE-mitre) на гитхабе с эскполитами  - функция `get_exploit_info` в каждом из скриптов;
 * [Репозиторий trickest](https://github.com/trickest/cve/) на гитхабе с PoC'ами  - функция `get_exploit_info_2` в каждом из скриптов.
@@ -29,6 +30,7 @@
    5. [get_kb.py](#get_kb.py)
    6. [export_YT_to_RV.py](#export_YT_to_RV.py)
    7. [get_cve_from_month_update.py](#get_cve_from_month_update.py)
+   8. [use_real_attack.py](#use_real_attack.py)
 
 # Install
 Для установки запустить 
@@ -249,3 +251,23 @@ python3 get_cve_from_month_update.py
 ['CVE-2019-0540(May include further steps)', 'CVE-2019-0600', 'CVE-2019-0601', 'CVE-2019-0602', 'CVE-2019-0615', 'CVE-2019-0616', 'CVE-2019-0619', 'CVE-2019-0621', 'CVE-2019-0628', 'CVE-2019-0635', 'CVE-2019-0636', 'CVE-2019-0643', 'CVE-2019-0648', 'CVE-2019-0658', 'CVE-2019-0660', 'CVE-2019-0661', 'CVE-2019-0664', 'CVE-2019-0669', 'CVE-2019-0676', 'CVE-2019-0686(May include further steps)', 'CVE-2019-0724(May include further steps)', 'CVE-2019-0741']
 ...
 ```
+
+## use_real_attack.py
+
+**Description** 
+
+Скрипт парсит сайт [CISA](https://www.cisa.gov/known-exploited-vulnerabilities-catalog), на котором ведется перечень с уязвимостями,
+которые использовались в реальных атаках и добавляет информацию в CustomField для каждой задачи в трекере задач YouTrack.
+
+Для того, чтобы просто получить список уязвимостей, необходимо принтануть функцию основную функцию: `print(use_real_attack_cve())`
+
+**Usage:**
+```shell
+python3 use_real_attack.py
+```
+
+**Output:**
+```shell
+['CVE-2021-27104', 'CVE-2021-27102', 'CVE-2021-27101', 'CVE-2021-27103', 'CVE-2021-21017', 'CVE-2021-28550', 'CVE-2018-4939', 'CVE-2018-15961', 'CVE-2018-4878', 'CVE-2020-5735', 'CVE-2019-2215', ...]
+```
+По состоянию на 04.07.2022 г. в данном перечне 888 уязвимостей.
