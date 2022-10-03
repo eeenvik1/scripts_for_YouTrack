@@ -1,4 +1,6 @@
 #! /usr/bin/python3
+import time
+
 import jinja2
 import requests
 from bs4 import BeautifulSoup
@@ -374,7 +376,6 @@ def email_alert(cve_list):
     recipients.append(USER1)
     recipients.append(USER2)
     msg = EmailMessage()
-    msg = EmailMessage()
     msg['Subject'] = 'OpenCVE'
     msg['From'] = EMAIL_HOST_USER
     msg['To'] = ", ".join(recipients)
@@ -407,6 +408,7 @@ def telegram_alert(message):
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID_A}&text={message}&parse_mode=markdown")
     requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendSticker?chat_id={CHAT_ID_A}&sticker={sticker}")
 
+
 # -------------------------------------------------MAIN-----------------------------------------------------------------
 headers = {
     "Accept": "application/json",
@@ -429,6 +431,7 @@ for item in cve_line:  # Удаление идентификаторов CVE п�
 
 cve_list = []
 for i, item in enumerate(vuln_list):  # Заведение задач в YouTrack
+    time.sleep(10)
     cve = vuln_list[i]
     post = get_cve_data(cve)
     if post == 200:
@@ -436,19 +439,17 @@ for i, item in enumerate(vuln_list):  # Заведение задач в YouTrac
     print(f'{i + 1} / {len(vuln_list)} - {post}')
 
 
-# mail alert
-'''
+cve_list_new = []
 if cve_list:
-    email_alert(cve_list)
-else:
-    print(f'No information about new CVE')
-'''
+    for item in cve_list:
+        cve_list_new.append(f'[{item}](https://nvd.nist.gov/vuln/detail/{item})')
 
 # telegram alert
-if cve_list:
-    if len(cve_list) == 1:
-        message = f'*OPENCVE*\nДобавлена информация о новой уязвимости ```{cve_list[0]}```'
+if cve_list_new:
+    if len(cve_list_new) == 1:
+        message = f'*OPENCVE*\nДобавлена информация о новой уязвимости {cve_list_new[0]}'
         telegram_alert(message)
     else:
-        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях ```{", ".join(cve_list)}```'
+        message = f'*OPENCVE*\nДобавлена информация о новых уязвимостях {", ".join(cve_list_new)}'
         telegram_alert(message)
+

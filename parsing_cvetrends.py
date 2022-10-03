@@ -1,3 +1,5 @@
+import time
+
 import jinja2
 import requests
 from bs4 import BeautifulSoup
@@ -503,6 +505,7 @@ for item in top_cve_list:
 email_list = []
 print(f'Добавление информации о новых уязвимостях:')
 if add_new_cve:
+    time.sleep(10)
     for i in range(len(add_new_cve)):
         print(f'{i+1} / {len(add_new_cve)} - {get_cve_data(add_new_cve[i])}')
         if (get_cve_data(add_new_cve[i])) == 200:
@@ -510,17 +513,17 @@ if add_new_cve:
 else:
     print('None')
 
-'''
-# Увемодление на почту
-if email_list:
-    email_alert(email_list)
-'''
 
+cve_list_new = []
 if email_list:
-    if len(email_list) == 1:
-        message = f'*CVETRENDS*\nДобавлена информация о новой уязвимости ```{email_list[0]}```'
+    for item in email_list:
+        cve_list_new.append(f'[{item}](https://nvd.nist.gov/vuln/detail/{item})')
+
+if cve_list_new:
+    if len(cve_list_new) == 1:
+        message = f'*CVETRENDS*\nДобавлена информация о новой уязвимости {cve_list_new[0]}'
         telegram_alert(message)
     else:
-        message = f'*CVETRENDS*\nДобавлена информация о новых уязвимостях ```{", ".join(email_list)}```'
+        message = f'*CVETRENDS*\nДобавлена информация о новых уязвимостях {", ".join(cve_list_new)}'
         telegram_alert(message)
 

@@ -139,8 +139,10 @@ def create_pdf_file(links):
         if check_file == 0:
             with open(f'{PATH}/{name}', 'wb') as f:
                 f.write(get.content)
+                f.close()
         else:
             print(f'file {name} already exists')
+            f.close()
 
 
 def get_name_list(path):
@@ -458,33 +460,36 @@ for item in cve_line:  # Удаление идентификаторов CVE п�
     if item not in sum_list:
         vuln_list.append(item)
 
+
 cve_list = []
 for i, item in enumerate(vuln_list):  # Заведение задач в YouTrack
+    time.sleep(10)
     cve = vuln_list[i]
     post = get_cve_data(cve)
     if post == 200:
         cve_list.append(cve)
-        print(f'{i + 1} / {len(vuln_list)} - {post}')
+        print(f'{i + 1} / {len(vuln_list)} - {post} - {cve}')
     else:
         print(f'{i + 1} / {len(vuln_list)} - No information for {cve}')
 
-# email alert
-'''
+
+cve_list_new = []
 if cve_list:
-    email_alert(cve_list)
-'''
+    for item in cve_list:
+        cve_list_new.append(f'[{item}](https://nvd.nist.gov/vuln/detail/{item})')
+
 # telegram alert
-if cve_list:
-    if len(cve_list) == 1:
-        message = f'*NKCKI*\nДобавлена информация о новой уязвимости ```{cve_list[0]}```'
+if cve_list_new:
+    if len(cve_list_new) == 1:
+        message = f'*NKCKI*\nДобавлена информация о новой уязвимости {cve_list_new[0]}'
         telegram_alert(message)
     else:
-        message = f'*NKCKI*\nДобавлена информация о новых уязвимостях ```{", ".join(cve_list)}```'
+        message = f'*NKCKI*\nДобавлена информация о новых уязвимостях {", ".join(cve_list_new)}'
         telegram_alert(message)
 
 
 # remove pdf buffer-----------------------------------------------------------------------------------------------------
-time.sleep(1)
+time.sleep(5)
 path_to_remove_pdf = []
 for item in name_list:
     path_to_remove_pdf.append(f'{PATH}/{item}')

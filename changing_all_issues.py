@@ -597,14 +597,14 @@ message = f'*CHANGING*\nПрограмма начала работу {start_date
 telegram_alert(message)
 # email_alert(time_start, time_stop)
 
-
-# DEBUG ONLY
 '''
+# DEBUG ONLY
+
 for i in range(len(cve_list)):
-    if cve_list[i] == 'CVE-2017-0213':
+    if cve_list[i] == 'CVE-2019-12353':
         print(cve_list[i])
         print(id_list[i])
 
-print(get_cve_data('CVE-2021-43256', '2-20142'))
+print(get_cve_data('CVE-2019-12353', '2-27790'))
 # print(get_kb('CVE-2017-0213'))
 '''

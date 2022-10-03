@@ -62,5 +62,3 @@ attack_cve_list = use_real_attack_cve()
 for cve in attack_cve_list:
     if cve in cve_list:
         print(update_custom_filed(id_list[cve_list.index(cve)]))
-
-print(len(use_real_attack_cve()))
