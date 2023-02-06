@@ -122,12 +122,15 @@ def get_cve_list(name_list):
 
 def get_links_for_bulletine():
     links = []
-    for page in range(3):
-        r = requests.get("https://safe-surf.ru/specialists/bulletins-nkcki/?PAGEN_1={}".format(page))
+    for page_number in range(2):
+        r = requests.get(f"https://safe-surf.ru/specialists/bulletins-nkcki/?PAGEN_1={page_number+1}")
         soup = BeautifulSoup(r.text, "html.parser")
-        for vuln in soup.find_all("div", "blockBase blockBulletine"):
-            bulletin_pdf_url = "https://safe-surf.ru{}".format(vuln.find('h4').find('a')['href'])
-            links.append(bulletin_pdf_url)
+        for vuln in soup.find_all("h3"):
+            vuln_name = re.findall(r"VULN-\d*.\d*", vuln.text)
+            if vuln_name:
+                full_name_vuln = vuln_name[0] + ".pdf"
+                bulletin_pdf_url = "https://safe-surf.ru/upload/VULN/{}".format(full_name_vuln)
+                links.append(bulletin_pdf_url)
     return links
 
 
