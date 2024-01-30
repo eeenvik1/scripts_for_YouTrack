@@ -1,7 +1,7 @@
 # Description
 Скрипты для парсинга различных сайтов:
 * OLD Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_pdf.py);
-* NEW Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_nkcki.py);
+* NEW Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_nkcki.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_nkcki.py);
 * Сайт <https://www.opencve.io/> - [`parsing_opencve.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_opencve.py);
 * Сайт <https://cvetrends.com/> - [`parsing_cvetrends.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_cvetrends.py);
 * Сайт <https://www.first.org/epss/data_stats> - [`add_epss.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/add_epss.py);
