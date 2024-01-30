@@ -1,6 +1,7 @@
 # Description
 Скрипты для парсинга различных сайтов:
-* Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_pdf.py);
+* OLD Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_pdf.py);
+* NEW Бюллетени НКЦКИ (<https://safe-surf.ru/>) - [`parsing_pdf.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_nkcki.py);
 * Сайт <https://www.opencve.io/> - [`parsing_opencve.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_opencve.py);
 * Сайт <https://cvetrends.com/> - [`parsing_cvetrends.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/parsing_cvetrends.py);
 * Сайт <https://www.first.org/epss/data_stats> - [`add_epss.py`](https://github.com/eeenvik1/scripts_for_YouTrack/blob/main/add_epss.py);
@@ -31,6 +32,7 @@
    6. [export_YT_to_RV.py](#export_YT_to_RV.py)
    7. [get_cve_from_month_update.py](#get_cve_from_month_update.py)
    8. [use_real_attack.py](#use_real_attack.py)
+   9. [parsing_nkcki.py](#parsing_nkcki.py)
 
 # Install
 Для установки запустить 
@@ -271,3 +273,32 @@ python3 use_real_attack.py
 ['CVE-2021-27104', 'CVE-2021-27102', 'CVE-2021-27101', 'CVE-2021-27103', 'CVE-2021-21017', 'CVE-2021-28550', 'CVE-2018-4939', 'CVE-2018-15961', 'CVE-2018-4878', 'CVE-2020-5735', 'CVE-2019-2215', ...]
 ```
 По состоянию на 04.07.2022 г. в данном перечне 888 уязвимостей.
+
+## parsing_nkcki.py
+
+**Description** 
+
+Скрипт парсит сайт [НКЦКИ](https://safe-surf.ru/specialists/bulletins-nkcki/?PAGEN_1=1), на котором ведется перечень с уязвимостями.
+
+
+**Usage:**
+```shell
+python3 parsing_nkcki.py
+```
+
+**Output:**
+```shell
+-------------------------------------------------------------------
+MITRE: CVE-2024-23210
+date_published: 2024-01-22
+date_updated: 2024-01-22
+-------------------------------------------------------------------
+MITRE: CVE-2024-23215
+date_published: 2024-01-22
+date_updated: 2024-01-22
+-------------------------------------------------------------------
+MITRE: CVE-2024-23224
+date_published: 2024-01-22
+date_updated: 2024-01-22
+-------------------------------------------------------------------
+```
